@@ -1,4 +1,12 @@
 spring:
+  profiles:
+    active: default
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/spring-boot-flyway
+    username: demo
+    password: demo
+
   sql:
     init:
       mode: always

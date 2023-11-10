@@ -8,6 +8,8 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
@@ -25,8 +27,10 @@ import static org.hamcrest.Matchers.hasSize;
 @Testcontainers
 public class IntegrationTests {
 
-    @LocalServerPort
-    private Integer port;
+    private static final Logger LOGGER = LoggerFactory.getLogger(IntegrationTests.class);
+
+//    @LocalServerPort
+//    private Integer port;
 
     static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:16-alpine");
 
@@ -42,6 +46,11 @@ public class IntegrationTests {
 
     @DynamicPropertySource
     static void configureProperties(DynamicPropertyRegistry registry) {
+        LOGGER.info("Setting up properties");
+        LOGGER.info("JDBC URL: {}", postgres.getJdbcUrl());
+        LOGGER.info("Username: {}", postgres.getUsername());
+        LOGGER.info("Password: {}", postgres.getPassword());
+
         registry.add("spring.datasource.url", postgres::getJdbcUrl);
         registry.add("spring.datasource.username", postgres::getUsername);
         registry.add("spring.datasource.password", postgres::getPassword);
@@ -52,7 +61,7 @@ public class IntegrationTests {
 
     @BeforeEach
     void setUp() {
-        RestAssured.baseURI = "http://localhost:" + port;
+        RestAssured.baseURI = "http://localhost:" + postgres.getFirstMappedPort();
         customerRepository.deleteAll();
     }
 
