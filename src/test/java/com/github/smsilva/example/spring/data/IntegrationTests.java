@@ -22,15 +22,16 @@ import java.util.List;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.hasSize;
+import static org.springframework.boot.test.context.SpringBootTest.*;
 
-@SpringBootTest
+@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @Testcontainers
 public class IntegrationTests {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(IntegrationTests.class);
 
-//    @LocalServerPort
-//    private Integer port;
+    @LocalServerPort
+    private Integer port;
 
     static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:16-alpine");
 
@@ -46,7 +47,7 @@ public class IntegrationTests {
 
     @DynamicPropertySource
     static void configureProperties(DynamicPropertyRegistry registry) {
-        LOGGER.info("Setting up properties");
+        LOGGER.info("Setting create properties");
         LOGGER.info("JDBC URL: {}", postgres.getJdbcUrl());
         LOGGER.info("Username: {}", postgres.getUsername());
         LOGGER.info("Password: {}", postgres.getPassword());
@@ -61,7 +62,7 @@ public class IntegrationTests {
 
     @BeforeEach
     void setUp() {
-        RestAssured.baseURI = "http://localhost:" + postgres.getFirstMappedPort();
+        RestAssured.baseURI = "http://localhost:" + port;
         customerRepository.deleteAll();
     }
 

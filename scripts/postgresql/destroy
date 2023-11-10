@@ -1,0 +1,6 @@
+#!/bin/bash
+docker-compose down
+docker-compose rm
+
+docker volume rm spring-data-demo_pgadmin
+docker volume rm spring-data-demo_postgres
