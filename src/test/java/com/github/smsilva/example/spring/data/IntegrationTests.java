@@ -33,7 +33,7 @@ public class IntegrationTests {
     @LocalServerPort
     private Integer port;
 
-    static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:16-alpine");
+    static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:15.4-alpine3.18");
 
     @BeforeAll
     static void beforeAll() {
