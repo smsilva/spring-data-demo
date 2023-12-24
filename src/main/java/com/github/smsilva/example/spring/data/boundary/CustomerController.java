@@ -9,15 +9,15 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class CustomerController {
 
-    private final CustomerRepository repo;
+    private final CustomerRepository repository;
 
-    public CustomerController(CustomerRepository repo) {
-        this.repo = repo;
+    public CustomerController(CustomerRepository repository) {
+        this.repository = repository;
     }
 
     @GetMapping("/api/customers")
     public List<Customer> getAll() {
-        return repo.findAll();
+        return repository.findAll();
     }
 
 }
